@@ -19,6 +19,9 @@
 		10A9707818AE17280003D28B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10A9706018AE17280003D28B /* UIKit.framework */; };
 		10A9708018AE17280003D28B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 10A9707E18AE17280003D28B /* InfoPlist.strings */; };
 		10A9708218AE17280003D28B /* FontViewerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 10A9708118AE17280003D28B /* FontViewerTests.m */; };
+		10A9708D18AE175E0003D28B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 10A9708C18AE175E0003D28B /* ViewController.m */; };
+		10AC0D8B18AFC0B200ECE416 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 10AC0D8918AFC0B200ECE416 /* LICENSE */; };
+		10AC0D8C18AFC0B200ECE416 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 10AC0D8A18AFC0B200ECE416 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +51,10 @@
 		10A9707D18AE17280003D28B /* FontViewerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FontViewerTests-Info.plist"; sourceTree = "<group>"; };
 		10A9707F18AE17280003D28B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		10A9708118AE17280003D28B /* FontViewerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FontViewerTests.m; sourceTree = "<group>"; };
+		10A9708B18AE175E0003D28B /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		10A9708C18AE175E0003D28B /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		10AC0D8918AFC0B200ECE416 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		10AC0D8A18AFC0B200ECE416 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +84,8 @@
 		10A9705018AE17270003D28B = {
 			isa = PBXGroup;
 			children = (
+				10AC0D8918AFC0B200ECE416 /* LICENSE */,
+				10AC0D8A18AFC0B200ECE416 /* README.md */,
 				10A9706218AE17280003D28B /* FontViewer */,
 				10A9707B18AE17280003D28B /* FontViewerTests */,
 				10A9705B18AE17280003D28B /* Frameworks */,
@@ -111,6 +120,8 @@
 				10A9706C18AE17280003D28B /* AppDelegate.m */,
 				10A9706E18AE17280003D28B /* Images.xcassets */,
 				10A9706318AE17280003D28B /* Supporting Files */,
+				10A9708B18AE175E0003D28B /* ViewController.h */,
+				10A9708C18AE175E0003D28B /* ViewController.m */,
 			);
 			path = FontViewer;
 			sourceTree = "<group>";
@@ -219,7 +230,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10AC0D8B18AFC0B200ECE416 /* LICENSE in Resources */,
 				10A9706718AE17280003D28B /* InfoPlist.strings in Resources */,
+				10AC0D8C18AFC0B200ECE416 /* README.md in Resources */,
 				10A9706F18AE17280003D28B /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -239,6 +252,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10A9708D18AE175E0003D28B /* ViewController.m in Sources */,
 				10A9706D18AE17280003D28B /* AppDelegate.m in Sources */,
 				10A9706918AE17280003D28B /* main.m in Sources */,
 			);
@@ -443,6 +457,7 @@
 				10A9708718AE17280003D28B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		10A9708818AE17280003D28B /* Build configuration list for PBXNativeTarget "FontViewerTests" */ = {
 			isa = XCConfigurationList;
@@ -451,6 +466,7 @@
 				10A9708A18AE17280003D28B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
