@@ -10,13 +10,12 @@
 
 @interface ViewController ()
 {
-    NSMutableArray *_fontNames;
-    unsigned _index;
+    NSMutableArray    *_fontNames;
+    unsigned          _index;
     
-    UILabel    *_fontName;
-    UITextView *_textView;
-    UIButton   *_prevButton;
-    UIButton   *_nextButton;
+    UINavigationItem  *_navigationItem;
+    UITextView        *_textView;
+    UISlider          *_sliderFontSize;
 }
 @end
 
@@ -39,61 +38,63 @@
         [_fontNames addObjectsFromArray:[UIFont fontNamesForFamilyName:familyName]];
     
     // setup views
-    _fontName = [[UILabel alloc] initWithFrame:CGRectNull];
+    id<UILayoutSupport> topLayoutGuide    = self.topLayoutGuide;
+    id<UILayoutSupport> bottomLayoutGuide = self.bottomLayoutGuide; // mainly to remove AMBIGUOUS LAYOUT warning
+
+    _navigationItem = [[UINavigationItem alloc] init]; // title set later
+    _navigationItem.leftBarButtonItem  = [[UIBarButtonItem alloc] initWithTitle:@"previous" style:UIBarButtonItemStylePlain target:self action:@selector(prevButtonHandler)];
+    _navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"next"     style:UIBarButtonItemStylePlain target:self action:@selector(nextButtonHandler)];
+    
+    UINavigationBar *navigationbar = [[UINavigationBar alloc] initWithFrame:CGRectZero]; // has to be CGRectZero and not CGRectNull!
+    navigationbar.items = @[_navigationItem];
     
     // copied from http://www.lipsum.com/
     const NSString *kTextLoremIpsum = @"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
     _textView = [[UITextView alloc] initWithFrame:CGRectNull];
-    [_textView setText:[NSString stringWithFormat:@"copyright 2014 marchv (Jens Schwarzer)\nmarchv\nMARCHV\n123.45\n678.90\n\n%@", kTextLoremIpsum]];
+    [_textView setText:[NSString stringWithFormat:@"copyright \u00A9 2014 marchv (Jens Schwarzer)\nmarchv\nMARCHV\n123.45\n678.90\n\n%@", kTextLoremIpsum]];
     
-    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectNull];
+    _sliderFontSize = [[UISlider alloc] initWithFrame:CGRectNull];
+    _sliderFontSize.minimumValue =   5.0f;
+    _sliderFontSize.maximumValue = 100.0f;
+    _sliderFontSize.value        =  30.0f;
+    [_sliderFontSize addTarget:self action:@selector(commonHandler) forControlEvents:UIControlEventValueChanged];
     
-    NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(_fontName, _textView, toolbar);
+    NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(topLayoutGuide, navigationbar, _textView, _sliderFontSize, bottomLayoutGuide);
 
     for (id view in [viewsDictionary allValues]) {
         [[self view] addSubview:view];
         [view setTranslatesAutoresizingMaskIntoConstraints:NO];
     }
   
-    [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_fontName]-|" options:0 metrics:nil views:viewsDictionary]];
+    [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[topLayoutGuide]|" options:0 metrics:nil views:viewsDictionary]];
+    [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[navigationbar]|" options:0 metrics:nil views:viewsDictionary]];
     [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_textView]-|" options:0 metrics:nil views:viewsDictionary]];
-    [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[toolbar]|" options:0 metrics:nil views:viewsDictionary]];
-    [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[_fontName]-[_textView]-[toolbar]|" options:0 metrics:nil views:viewsDictionary]];
+    [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_sliderFontSize]-|" options:0 metrics:nil views:viewsDictionary]];
+    [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bottomLayoutGuide]|" options:0 metrics:nil views:viewsDictionary]];
+    [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topLayoutGuide]-[navigationbar]-[_textView]-[_sliderFontSize]-[bottomLayoutGuide]" options:0 metrics:nil views:viewsDictionary]];
     
-    _prevButton = [[UIButton alloc] initWithFrame:CGRectMake(5, 5, 100, 20)];
-    [_prevButton setTitle:@"< previous" forState:UIControlStateNormal];
-    [_prevButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [_prevButton addTarget:self action:@selector(prevButtonHandler:) forControlEvents:UIControlEventTouchUpInside];
-    
-    _nextButton = [[UIButton alloc] initWithFrame:CGRectMake(5, 5, 100, 20)];
-    [_nextButton setTitle:@"next >" forState:UIControlStateNormal];
-    [_nextButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [_nextButton addTarget:self action:@selector(nextButtonHandler:) forControlEvents:UIControlEventTouchUpInside];
-
-    [toolbar setItems:@[[[UIBarButtonItem alloc] initWithCustomView:_prevButton], [[UIBarButtonItem alloc] initWithCustomView:_nextButton]] animated:YES];
-    
-    [self commonButtonHandler];
+    [self commonHandler];
 }
 
-- (void)prevButtonHandler:(UIButton*)button
+- (void)prevButtonHandler
 {
     _index--;
-    [self commonButtonHandler];
+    [self commonHandler];
 }
 
-- (void)nextButtonHandler:(UIButton*)button
+- (void)nextButtonHandler
 {
     _index++;
-    [self commonButtonHandler];
+    [self commonHandler];
 }
 
-- (void)commonButtonHandler
+- (void)commonHandler
 {
-    if (_index == 0) [_prevButton setEnabled:NO]; else [_prevButton setEnabled:YES];
-    if (_index + 1 >= [_fontNames count]) [_nextButton setEnabled:NO]; else [_nextButton setEnabled:YES];
+    if (_index == 0)                  _index++;
+    if (_index >= [_fontNames count]) _index--;
     
-    [_fontName setText:[NSString stringWithFormat:@"%@ (%u/%lu)", [_fontNames objectAtIndex:_index], _index + 1, (unsigned long)[_fontNames count]]];
-    [_textView setFont:[UIFont fontWithName:[_fontNames objectAtIndex:_index] size:28.0f]];
+    [_navigationItem setTitle:[NSString stringWithFormat:@"%@ (%u/%lu)", [_fontNames objectAtIndex:_index - 1], _index, (unsigned long)[_fontNames count]]];
+    [_textView setFont:[UIFont fontWithName:[_fontNames objectAtIndex:_index - 1] size:[_sliderFontSize value]]];
 }
 
 @end
