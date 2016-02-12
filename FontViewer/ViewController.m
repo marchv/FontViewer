@@ -62,8 +62,10 @@
     NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(topLayoutGuide, navigationbar, _textView, _sliderFontSize, bottomLayoutGuide);
 
     for (id view in [viewsDictionary allValues]) {
-        [[self view] addSubview:view];
-        [view setTranslatesAutoresizingMaskIntoConstraints:NO];
+        if ([view isKindOfClass:[UIView class]]) {
+            [[self view] addSubview:view];
+            [view setTranslatesAutoresizingMaskIntoConstraints:NO];
+        }
     }
   
     [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[topLayoutGuide]|" options:0 metrics:nil views:viewsDictionary]];
